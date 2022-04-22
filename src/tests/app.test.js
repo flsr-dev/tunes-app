@@ -6,7 +6,7 @@ import renderWithRouter from './helpers/renderWithRouter';
 describe('Test <App/> routes', () => {
   it('tests if the login page is rendered', () => {
     renderWithRouter(<App />);
-    const loginButton = screen.getAllByRole('button', { name: /login/i });
+    const loginButton = screen.getByRole('button', { name: /login/i });
     expect(loginButton).toBeInTheDocument();
   });
 });
