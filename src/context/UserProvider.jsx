@@ -1,16 +1,16 @@
 import React, { useMemo, useState } from 'react';
 import { arrayOf, node, oneOfType } from 'prop-types';
-import AppContext from './AppContext';
+import { UserContext } from './contexts';
 
 function UserProvider({ children }) {
   const [username, setUsername] = useState('');
   const value = useMemo(() => ({ username, setUsername }), [username]);
   return (
-    <AppContext.Provider
+    <UserContext.Provider
       value={value}
     >
       {children}
-    </AppContext.Provider>
+    </UserContext.Provider>
   );
 }
 
