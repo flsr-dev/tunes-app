@@ -14,8 +14,9 @@ export default function Login() {
   };
   return (
     <div>
-      <input type="text" name="username" aria-label="user name" value={username} onChange={handleInputChange} dasdasdsadasdasdsadsadsadasdasdasdasdasdsadasdasdasdasdasdsadasdasdsadsadasdasdasdasdasdas />
+      <input type="text" name="username" aria-label="user name" value={username} onChange={handleInputChange} />
       <button type="button">Login</button>
+
     </div>
   );
 }
