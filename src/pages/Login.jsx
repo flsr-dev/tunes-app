@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../context/contexts';
 
 export default function Login() {
@@ -7,10 +7,16 @@ export default function Login() {
   const { setUserName } = useContext(UserContext);
 
   const checkUserLength = () => {
-    const MIN_USERNAME_LENGTH = 3;
-    if (username >= 3) setIsLoginDisabled(false);
-    if (username <= 3) setIsLoginDisabled(true);
+    if (username) {
+      const MIN_USERNAME_LENGTH = 3;
+      if (username.length >= MIN_USERNAME_LENGTH) setIsLoginDisabled(false);
+      if (username.length < MIN_USERNAME_LENGTH) setIsLoginDisabled(true);
+    }
   };
+
+  useEffect(() => {
+    checkUserLength();
+  }, [username]);
 
   const handleInputChange = ({ target: { value } }) => {
     setTempUsername(value);
@@ -24,7 +30,7 @@ export default function Login() {
         value={username}
         onChange={handleInputChange}
       />
-      <button type="button">Login</button>
+      <button type="button" disabled={isLoginDisabled}>Login</button>
 
     </div>
   );
