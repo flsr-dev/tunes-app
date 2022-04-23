@@ -10,11 +10,9 @@ export default function Login() {
 
   useEffect(() => {
     const checkUserLength = () => {
-      if (username) {
-        const MIN_USERNAME_LENGTH = 3;
-        if (username.length >= MIN_USERNAME_LENGTH) setIsLoginDisabled(false);
-        if (username.length < MIN_USERNAME_LENGTH) setIsLoginDisabled(true);
-      }
+      const MIN_USERNAME_LENGTH = 3;
+      if (username && username.length >= MIN_USERNAME_LENGTH) return setIsLoginDisabled(false);
+      return setIsLoginDisabled(true);
     };
     checkUserLength();
   }, [username]);
