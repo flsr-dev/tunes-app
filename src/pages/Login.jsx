@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../context/contexts';
+import useCreateUser from '../hooks/useCreateUser';
 
 export default function Login() {
-  const [username, setTempUsername] = useState('');
+  const [username, setUsername] = useState('');
   const [isLoginDisabled, setIsLoginDisabled] = useState(true);
-  const { setUsername } = useContext(UserContext);
+  const { setUserInfo } = useContext(UserContext);
   const history = useNavigate();
 
   useEffect(() => {
@@ -18,12 +19,12 @@ export default function Login() {
   }, [username]);
 
   const handleLoginBtnClick = () => {
-    setUsername(username);
+    useCreateUser({ name: username }, setUserInfo);
     history('/search');
   };
 
   const handleInputChange = ({ target: { value } }) => {
-    setTempUsername(value);
+    setUsername(value);
   };
   return (
     <div>

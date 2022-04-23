@@ -3,8 +3,8 @@ import { arrayOf, node, oneOfType } from 'prop-types';
 import { UserContext } from './contexts';
 
 function UserProvider({ children }) {
-  const [username, setUsername] = useState('');
-  const value = useMemo(() => ({ username, setUsername }), [username]);
+  const [user, setUserInfo] = useState('');
+  const value = useMemo(() => ({ user, setUserInfo }), [user]);
   return (
     <UserContext.Provider
       value={value}

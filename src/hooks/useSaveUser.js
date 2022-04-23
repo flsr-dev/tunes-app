@@ -1,12 +1,8 @@
-import { useContext } from 'react';
-import { UserContext } from '../context/contexts';
-
 const USER_KEY = 'user';
 
-const useSaveUser = (user) => {
-  const { setUsername } = useContext(UserContext);
+const useSaveUser = (user, setUserInfo) => {
   localStorage.setItem(USER_KEY, JSON.stringify(user));
-  setUsername(user);
+  setUserInfo(user);
 };
 
 export default useSaveUser;
