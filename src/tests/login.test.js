@@ -49,4 +49,23 @@ describe('Login Page:', () => {
     const searchPage = await screen.findByText(/search/i);
     expect(searchPage).toBeInTheDocument();
   });
+
+  it('tests if the user info is saved on localstorage', () => {
+    renderWithRouter(<UserProvider><App /></UserProvider>, ['/']);
+    const loginButton = screen.getByRole('button', { name: /login/i });
+    const nameInput = screen.getByLabelText(/user name/i);
+    const validUserLength = 'user';
+    const USER_KEY = 'user';
+    const newUser = {
+      name: 'user',
+      email: '',
+      image: '',
+      description: '',
+    };
+
+    userEvent.type(nameInput, validUserLength);
+    userEvent.click(loginButton);
+    const storedUserInfo = JSON.parse(localStorage.getItem(USER_KEY));
+    expect(storedUserInfo).toEqual(newUser);
+  });
 });
