@@ -1,5 +1,5 @@
 import React from 'react';
-import { Router } from 'react-router-dom';
+import { MemoryRouter } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 import { render } from '@testing-library/react';
 
@@ -7,9 +7,9 @@ const renderWithRouter = (component, historyEntries = ['/']) => {
   const history = createMemoryHistory({ initialEntries: historyEntries });
   return {
     ...render(
-      <Router location={history.location} history={history}>
+      <MemoryRouter history={history}>
         {component}
-      </Router>,
+      </MemoryRouter>,
     ),
     history,
   };
