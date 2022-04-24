@@ -5,6 +5,7 @@ import Search from '../pages/Search';
 import Album from '../pages/Album';
 import Favorites from '../pages/Favorites';
 import Profile from '../pages/Profile';
+import ProfileEdit from '../pages/ProfileEdit';
 import renderWithRouter from './helpers/renderWithRouter';
 
 const USER_KEY = 'user';
@@ -50,6 +51,12 @@ describe('Header component:', () => {
   it('tests if the header is present in the profile page', () => {
     const { name } = NEW_USER;
     renderWithRouter(<Profile />, ['/profile']);
+    const userNameElement = screen.getByText(name);
+    expect(userNameElement).toBeInTheDocument();
+  });
+  it('tests if the header is present in the profile edit page', () => {
+    const { name } = NEW_USER;
+    renderWithRouter(<ProfileEdit />, ['/profile/edit']);
     const userNameElement = screen.getByText(name);
     expect(userNameElement).toBeInTheDocument();
   });
