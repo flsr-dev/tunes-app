@@ -46,4 +46,11 @@ describe('Header component:', () => {
     const userNameElement = screen.getByText(name);
     expect(userNameElement).toBeInTheDocument();
   });
+
+  it('tests if the header is present in the profile page', () => {
+    const { name } = NEW_USER;
+    renderWithRouter(<Profile />, ['/profile']);
+    const userNameElement = screen.getByText(name);
+    expect(userNameElement).toBeInTheDocument();
+  });
 });
