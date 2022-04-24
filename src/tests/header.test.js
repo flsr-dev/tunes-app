@@ -39,4 +39,11 @@ describe('Header component:', () => {
     const userNameElement = screen.getByText(name);
     expect(userNameElement).toBeInTheDocument();
   });
+
+  it('tests if the header is present in the favorites page', () => {
+    const { name } = NEW_USER;
+    renderWithRouter(<Favorites />, ['/favorites']);
+    const userNameElement = screen.getByText(name);
+    expect(userNameElement).toBeInTheDocument();
+  });
 });
