@@ -12,13 +12,16 @@ export default function Login() {
   const history = useNavigate();
 
   useEffect(() => {
-    const checkUserLength = () => {
+    const checkFieldsValidity = () => {
       const MIN_USERNAME_LENGTH = 3;
-      if (username && username.length >= MIN_USERNAME_LENGTH) return setIsLoginDisabled(false);
-      return setIsLoginDisabled(true);
+      const MIN_PASSWORD_LENGTH = 8;
+      const isNameValid = username?.length < MIN_USERNAME_LENGTH;
+      const isPasswordValid = password?.length < MIN_PASSWORD_LENGTH;
+      const buttonState = isNameValid || isPasswordValid;
+      return setIsLoginDisabled(buttonState);
     };
-    checkUserLength();
-  }, [username]);
+    checkFieldsValidity();
+  }, [username, password]);
 
   const handleLoginBtnClick = () => {
     useCreateUser({ name: username }, setUserInfo);

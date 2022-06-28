@@ -1,5 +1,6 @@
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import React from 'react';
+import userEvent from '@testing-library/user-event';
 import Header from '../components/Header';
 import Search from '../pages/Search';
 import Album from '../pages/Album';
@@ -8,6 +9,7 @@ import Profile from '../pages/Profile';
 import ProfileEdit from '../pages/ProfileEdit';
 import renderWithRouter from './helpers/renderWithRouter';
 import * as getUser from '../services/getLoggedUser';
+import UserProvider from '../context/UserProvider';
 
 const USER_KEY = 'user';
 const NEW_USER = {
@@ -74,5 +76,35 @@ describe('Header component:', () => {
     const userNameElement = screen.getByText(name);
     expect(mockedGetUser).toBeCalled();
     expect(userNameElement).toBeInTheDocument();
+  });
+
+  it('tests if the navigation link redirects to search page', async () => {
+    const { history } = renderWithRouter(<UserProvider><Profile /></UserProvider>, ['/profile']);
+    const searchLink = screen.getByRole('link', { name: /search/i });
+    expect(searchLink).toBeInTheDocument();
+    userEvent.click(searchLink);
+    await waitFor(() => {
+      expect(history.location.pathname).toBe('/search');
+    });
+  });
+
+  it('tests if the navigation link redirects to profile page', async () => {
+    const { history } = renderWithRouter(<UserProvider><Search /></UserProvider>, ['/profile']);
+    const profileLink = screen.getByRole('link', { name: /profile/i });
+    expect(profileLink).toBeInTheDocument();
+    userEvent.click(profileLink);
+    await waitFor(() => {
+      expect(history.location.pathname).toBe('/profile');
+    });
+  });
+
+  it('tests if the navigation link redirects to favorites page', async () => {
+    const { history } = renderWithRouter(<UserProvider><Search /></UserProvider>, ['/profile']);
+    const favoritesLink = screen.getByRole('link', { name: /favorites/i });
+    expect(favoritesLink).toBeInTheDocument();
+    userEvent.click(favoritesLink);
+    await waitFor(() => {
+      expect(history.location.pathname).toBe('/favorites');
+    });
   });
 });

@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import React from 'react';
 import userEvent from '@testing-library/user-event';
 import Login from '../pages/Login';
@@ -19,35 +19,47 @@ describe('Login Page:', () => {
     expect(loginButton).toBeDisabled();
   });
 
-  it('tests if the button changes to enabled only when passed a valid username length', () => {
-    renderWithRouter(<UserProvider><Login /></UserProvider>, ['/']);
-    const loginButton = screen.getByRole('button', { name: /login/i });
-    const nameInput = screen.getByLabelText(/user name/i);
-    const invalidUserLength = 'us';
-    const validUserLength = 'use';
+  it(
+    'tests if the button changes to enabled only when passed a valid username and password',
+    () => {
+      renderWithRouter(<UserProvider><Login /></UserProvider>, ['/']);
+      const loginButton = screen.getByRole('button', { name: /login/i });
+      const nameInput = screen.getByLabelText(/user name/i);
+      const passwordInput = screen.getByLabelText(/password/i);
 
-    userEvent.type(nameInput, invalidUserLength);
-    expect(loginButton).toBeDisabled();
+      const invalidUserLength = 'us';
+      const validUserLength = 'use';
+      const validPassword = '12345678';
 
-    userEvent.type(nameInput, `{selectall}{del}${validUserLength}`);
-    expect(loginButton).not.toBeDisabled();
+      userEvent.type(nameInput, invalidUserLength);
+      expect(loginButton).toBeDisabled();
 
-    nameInput.setSelectionRange(0, 2);
-    userEvent.type(nameInput, '{del}');
-    expect(loginButton).toBeDisabled();
-  });
+      userEvent.type(nameInput, `{selectall}{del}${validUserLength}`);
+      userEvent.type(passwordInput, validPassword);
+      expect(loginButton).not.toBeDisabled();
+
+      nameInput.setSelectionRange(0, 2);
+      userEvent.type(nameInput, '{del}');
+      expect(loginButton).toBeDisabled();
+    },
+  );
 
   it('tests if the page is redirected to search after login', async () => {
-    renderWithRouter(<UserProvider><App /></UserProvider>, ['/']);
+    const { history } = renderWithRouter(<UserProvider><App /></UserProvider>, ['/']);
     const loginButton = screen.getByRole('button', { name: /login/i });
     const nameInput = screen.getByLabelText(/user name/i);
+    const passwordInput = screen.getByLabelText(/password/i);
+    const validPassword = '12345678';
     const validUserLength = 'user';
 
     userEvent.type(nameInput, validUserLength);
+    userEvent.type(passwordInput, validPassword);
+
     expect(loginButton).toBeEnabled();
     userEvent.click(loginButton);
-    const searchPage = await screen.findByText(/search/i);
-    expect(searchPage).toBeInTheDocument();
+    await waitFor(() => {
+      expect(history.location.pathname).toBe('/search');
+    });
   });
 
   it('tests if the user info is saved on localstorage', () => {
