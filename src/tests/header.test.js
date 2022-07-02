@@ -78,10 +78,19 @@ describe('Header component:', () => {
     expect(userNameElement).toBeInTheDocument();
   });
 
+  it('tests if the navigation links are available', async () => {
+    renderWithRouter(<UserProvider><Search /></UserProvider>, ['/profile']);
+    const favoritesLink = screen.getByRole('link', { name: /favorites/i });
+    const searchLink = screen.getByRole('link', { name: /search/i });
+    const profileLink = screen.getByRole('link', { name: /profile/i });
+
+    expect(favoritesLink).toBeInTheDocument();
+    expect(profileLink).toBeInTheDocument();
+    expect(searchLink).toBeInTheDocument();
+  });
   it('tests if the navigation link redirects to search page', async () => {
     const { history } = renderWithRouter(<UserProvider><Profile /></UserProvider>, ['/profile']);
     const searchLink = screen.getByRole('link', { name: /search/i });
-    expect(searchLink).toBeInTheDocument();
     userEvent.click(searchLink);
     await waitFor(() => {
       expect(history.location.pathname).toBe('/search');
@@ -91,7 +100,6 @@ describe('Header component:', () => {
   it('tests if the navigation link redirects to profile page', async () => {
     const { history } = renderWithRouter(<UserProvider><Search /></UserProvider>, ['/profile']);
     const profileLink = screen.getByRole('link', { name: /profile/i });
-    expect(profileLink).toBeInTheDocument();
     userEvent.click(profileLink);
     await waitFor(() => {
       expect(history.location.pathname).toBe('/profile');
@@ -101,7 +109,6 @@ describe('Header component:', () => {
   it('tests if the navigation link redirects to favorites page', async () => {
     const { history } = renderWithRouter(<UserProvider><Search /></UserProvider>, ['/profile']);
     const favoritesLink = screen.getByRole('link', { name: /favorites/i });
-    expect(favoritesLink).toBeInTheDocument();
     userEvent.click(favoritesLink);
     await waitFor(() => {
       expect(history.location.pathname).toBe('/favorites');
