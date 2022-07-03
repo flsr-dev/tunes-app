@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import Header from '../components/Header';
+import { search } from '../services/iTunes';
 
 export default function Search() {
   const [searchTerm, setSearchTerm] = useState('');
   const [isSearchButtonDisabled, setIsSearchDisabled] = useState(true);
   const [searchEntity, setSearchEntity] = useState(null);
+  const [resultAmount, setResultAmount] = useState('');
+  const [resultData, setResultData] = useState('');
 
   useEffect(() => {
     const checkFieldsValidity = () => {
@@ -21,10 +24,11 @@ export default function Search() {
 
   const onFormSubmit = async (event) => {
     event.preventDefault();
-    const teste = await fetch(`https://itunes.apple.com/search?term=${searchTerm}&entity=${searchEntity}`)
-      .then((data) => data.json());
-    console.log(teste);
+    const { data: { resultCount, results } } = await search(searchTerm, searchEntity);
+    setResultData(results);
+    setResultAmount(resultCount);
   };
+
   return (
     <>
       <Header />
@@ -71,8 +75,9 @@ export default function Search() {
             onChange={(event) => handleInputChange(event, setSearchTerm)}
           />
           <button
-            type="button"
+            type="submit"
             disabled={isSearchButtonDisabled}
+            onSubmit={onFormSubmit}
           >
             Login
           </button>
